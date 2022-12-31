@@ -12,7 +12,18 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercent = 20
     
+    @FocusState private var amountIsFocused: Bool
+    
     let tipPercentages = [10, 20, 30, 40, 50, 0]
+    var totalPerPersion : Double {
+        let peopleCount = Double(numberOfPeople)
+        let tipSelection = Double(tipPercent)
+        
+        let tipValue = checkAmount / 100 * tipSelection
+        let grandTotal = checkAmount + tipValue
+        let amountPerPerson = grandTotal / peopleCount
+        return amountPerPerson
+    }
 
     var body: some View {
         NavigationView{
@@ -22,6 +33,7 @@ struct ContentView: View {
                     TextField("Amount", value: $checkAmount,format: .currency(code: Locale.current.currency?.identifier ?? "KES")
                     )
                     .keyboardType(.decimalPad)
+                    .focused($amountIsFocused)
                     
                     Picker("Number of People", selection: $numberOfPeople) {
                         ForEach(0..<100) { numberOfPeople in
@@ -48,10 +60,18 @@ struct ContentView: View {
                 }
                 
                 Section{
-                    Text(checkAmount,format: .currency(code: Locale.current.currency?.identifier ?? "KES"))
+                    
+                    Text(totalPerPersion,format: .currency(code: Locale.current.currency?.identifier ?? "KES"))
                 }
             }
             .navigationTitle("Tippa Silver")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard){
+                    Button("Done"){
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
