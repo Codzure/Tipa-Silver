@@ -17,18 +17,20 @@ struct ContentView: View {
     var body: some View {
         Form{
             Section{
-                TextField(
-                    "Amount",
-                    value: $checkAmount,
-                    format: .currency(code: Locale.current.currency?.identifier ?? "KES")
+                TextField("Amount", value: $checkAmount,format: .currency(code: Locale.current.currency?.identifier ?? "KES")
                 )
                 .keyboardType(.decimalPad)
+                
+                Picker("Number of People", selection: $numberOfPeople) {
+                    ForEach(0..<100) { numberOfPeople in
+                        Text("\(numberOfPeople) people")
+                    }
+                }
+                
             }
             
             Section{
-                Text(
-                    checkAmount,
-                    format: .currency(code: Locale.current.currency?.identifier ?? "KES"))
+                Text(checkAmount,format: .currency(code: Locale.current.currency?.identifier ?? "KES"))
             }
         }
     }
